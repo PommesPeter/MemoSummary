@@ -1,0 +1,26 @@
+{
+  "name": "MemoSummary",
+  "version": "1.0.0",
+  "description": "This is my personal blog with vuepress, Hope you can enjoy the knowledege here. Swiming in the knowledge of sea.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs",
+    "deploy": "bash deploy.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PommesPeter/MemoSummary.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PommesPeter/MemoSummary/issues"
+  },
+  "homepage": "https://github.com/PommesPeter/MemoSummary#readme",
+  "devDependencies": {
+    "vuepress": "^1.8.2",
+    "vuepress-theme-vdoing": "^1.8.3"
+  }
+}
