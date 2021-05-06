@@ -13,6 +13,8 @@ module.exports = {
     docsDir: 'docs', // 编辑的文件夹
     editLinks: false, // 启用编辑
     editLinkText: '编辑',
+    nextLinks: true,
+    prevlinks: true,
 
     //*** 以下配置是Vdoing主题改动和新增的配置 ***//
 
@@ -50,8 +52,8 @@ module.exports = {
     // rightMenuBar: false, // 是否显示右侧文章大纲栏，默认true (屏宽小于1300px下无论如何都不显示)
     // sidebarOpen: false, // 初始状态是否打开侧边栏，默认true
     // pageButton: false, // 是否显示快捷翻页按钮，默认true
-    // sidebar: 'structuring', // 侧边栏  'structuring' | { mode: 'structuring', collapsable: Boolean} | 'auto' | 自定义    温馨提示：目录页数据依赖于结构化的侧边栏数据，如果你不设置为'structuring',将无法使用目录页
-    sidebar,
+    sidebar: 'structuring', // 侧边栏  'structuring' | { mode: 'structuring', collapsable: Boolean} | 'auto' | 自定义    温馨提示：目录页数据依赖于结构化的侧边栏数据，如果你不设置为'structuring',将无法使用目录页
+    // sidebar,
     author: { // 文章默认的作者信息，可在md文件中单独配置此信息 String | {name: String, link: String}
         name: 'PommesPeter', // 必需
         link: 'https://github.com/PommesPeter' // 可选的

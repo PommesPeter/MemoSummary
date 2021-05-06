@@ -1,9 +1,9 @@
 // 此文件没有用到，仅用于测试和侧边栏数据格式的参考。
 
 module.exports = { // 侧边栏
-  '/01.前端/': [
+  '/Courses/': [
     {
-      title: 'JavaScript',
+      title: 'Courses',
       collapsable: false, //是否可折叠，可选的，默认true
       children: [
         ['01.JavaScript/01.JavaScript中的名词概念', 'JavaScript中的名词概念'],
@@ -15,7 +15,7 @@ module.exports = { // 侧边栏
       ]
     },
   ],
-  '/02.页面/': [
+  '/DeepLearning/': [
     {
       title: 'html-css',
       collapsable: false,
@@ -31,7 +31,7 @@ module.exports = { // 侧边栏
       ]
     },
   ],
-  '/03.技术杂谈/': [
+  '/Algorithm/': [
     {
       title: '技术杂谈',
       collapsable: false, //是否可折叠，可选的，默认true
@@ -47,7 +47,7 @@ module.exports = { // 侧边栏
       ]
     }
   ],
-  '/04.其他/': [
+  '/Development/': [
     {
       title: '学习',
       collapsable: false,
