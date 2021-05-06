@@ -2,7 +2,7 @@
 pageComponent: 
   name: Catalogue
   data: 
-    key: Development
+    path: Development
     imgUrl: /img/other.png
     description: 好记性不如烂笔头，记录所遇所思所想
 title: 各种开发技术学习记录
