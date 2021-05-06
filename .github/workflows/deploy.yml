@@ -33,6 +33,11 @@ jobs:
         with:
           node-version: 12.x
 
+      - name: Change Time Zone
+        uses: actions/set-timezone-action@v1.1
+        with:
+          timezoneLinux: "Asia/Shanghai"
+
       - name: Install dependencies
         if: steps.cache_node_modules.outputs.cache-hit != 'true'
         run: |
