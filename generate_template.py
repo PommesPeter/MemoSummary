@@ -21,6 +21,8 @@ def get_argparse():
     parser = argparse.ArgumentParser()
     parser.add_argument('--path', type=str, default='./',
                         help="the file path you save the file.")
+    parser.add_argument('--mode', type=str, default='articles',
+                        help="choose the mode to generate the file.")
     parser.add_argument('--title', type=str, default='',
                         help="the title you write about this file")
     parser.add_argument('--link', type=str, default='',
@@ -53,6 +55,7 @@ def get_argparse():
 
 def create_template(args, mode):
     res = ''
+    path_str = ''
     res += '---\n'
     if mode == "article":
         res += ('title: ' + args.title + '\n')
@@ -81,7 +84,11 @@ def create_template(args, mode):
     elif mode == "other":
         pass
     res += '---\n'
-    with open(args.path, 'w') as f:
+    if not args.path.endswith('.md'):
+        path_str = args.path + '.md'
+    else:
+        path_str = args.path
+    with open(path_str, 'w') as f:
         f.write(res)
     print("Generated...")
 
@@ -90,4 +97,4 @@ if __name__ == '__main__':
 
     args = get_argparse()
     print(get_time())
-    create_template(args)
+    create_template(args, args.mode)

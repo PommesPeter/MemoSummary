@@ -1,0 +1,1 @@
+python generate_template.py --title JAVA-GUI编程 --link /courses/oop/gui --categories 课程学习,面向对象编程 --tags OOP,JAVA --path ./docs/Courses/01.面向对象程序设计/02.JAVA-Gui编程.md --mode article
