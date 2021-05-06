@@ -57,7 +57,7 @@ module.exports = {
         link: 'https://github.com/PommesPeter' // 可选的
     },
     blogger: { // 博主信息，显示在首页侧边栏
-        avatar: '/imgs/tx.png',
+        avatar: '/imgs/mytx.png',
         name: 'PommesPeter',
         slogan: '深度炼丹师'
     },
