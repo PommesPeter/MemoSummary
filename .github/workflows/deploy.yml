@@ -34,7 +34,7 @@ jobs:
           node-version: 12.x
 
       - name: Change Time Zone
-        uses: actions/set-timezone-action@v1.1
+        uses: szenius/set-timezone@v1.0
         with:
           timezoneLinux: "Asia/Shanghai"
 
