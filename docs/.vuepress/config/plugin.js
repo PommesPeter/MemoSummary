@@ -6,5 +6,10 @@ module.exports = [
     // }],
     // 可以添加第三方搜索链接的搜索框（原官方搜索框的参数仍可用）
 
-    ['one-click-copy'],
+    ['one-click-copy', {
+        copySelector: ['div[class*="language-"] pre', 'div[class*="aside-code"] aside'], // String or Array
+        copyMessage: 'Copy successfully and then paste it for use.', // default is 'Copy successfully and then paste it for use.'
+        duration: 300, // prompt message display time.
+        showInMobile: false // whether to display on the mobile side, default: false.
+    }],
 ]
