@@ -24,22 +24,22 @@ module.exports = [
   },
   {
     text: '👀开发技术',
-    link: '/technology/',
+    link: '/development/',
     items: [
-      { text: '前端开发', link: '/technology/basis' },
-      { text: '后端开发', link: '/technology/basisframework' },
-      { text: '杂项笔记', link: '/technology/objectdetection' },
+      { text: '前端开发', link: '/development/basis' },
+      { text: '后端开发', link: '/development/basisframework' },
+      { text: '杂项笔记', link: '/development/objectdetection' },
     ]
   },
   {
     text: '😊课程学习',
-    link: '/study/',
+    link: '/courses/',
     items: [
-      { text: '面向对象程序设计', link: '/study/oop/' },
-      { text: '数学建模', link: '/study/2b7108/' },
-      { text: '算法设计与分析', link: '/study/b5e154/' },
-      { text: '数字图像处理', link: '/study/69521d/' },
-      { text: '软件工程与UML', link: '/study/527279/' },
+      { text: '面向对象程序设计', link: '/courses/oop/' },
+      { text: '数学建模', link: '/courses/2b7108/' },
+      { text: '算法设计与分析', link: '/courses/b5e154/' },
+      { text: '数字图像处理', link: '/courses/69521d/' },
+      { text: '软件工程与UML', link: '/courses/527279/' },
       // { text: 'mysql', link: '/study/f78c0f/' },
       // { text: 'ceph', link: '/study/fd1213/' },
       // { text: 'spark', link: '/study/74209d/' },
