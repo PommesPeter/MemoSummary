@@ -1,7 +1,7 @@
 const nav = require('./themeConfig/nav.js');
 const sidebar = require('./themeConfig/sidebar.js');
 const { getSidebar } = require('./utils.js');
-const plugins = require("./plugin.js")
+// const plugins = require("./plugin.js")
 // const htmlModules = require('./themeConfig/htmlModules.js');
 
 module.exports = {
@@ -91,7 +91,9 @@ module.exports = {
             'Evan Xu | <a href="https://github.com/xugaoyi/vuepress-theme-vdoing/blob/master/LICENSE" target="_blank">MIT License</a>', // 博客版权信息，支持a标签
     },
     // htmlModules // 插入hmtl(广告)模块
-    plugins,
+    plugins: [
+        'vuepress-plugin-latex'
+    ],
     locales: {
         '/': {
             lang: 'zh-CN'
