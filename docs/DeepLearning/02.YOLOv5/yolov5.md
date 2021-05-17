@@ -1,0 +1,229 @@
+[TOC]
+
+# Yolov5的结构解析
+
+> **yolov5拥有强大的效果，但是在其实现强大效果的同时，其完备的封装及复杂的参数使得我们难以对其结构进行深入分析**
+>
+> *以下为我对yolov5结构的解析*
+
+## yolov5s.yaml
+
+以下为yolov5s.yaml
+
+```yaml
+
+# parameters
+nc: 9  # number of classes
+depth_multiple: 0.33  # model depth multiple
+width_multiple: 0.50  # layer channel multiple
+
+# anchors
+anchors:
+  - [10,13, 16,30, 33,23]  # P3/8
+  - [30,61, 62,45, 59,119]  # P4/16
+  - [116,90, 156,198, 373,326]  # P5/32
+
+# YOLOv5 backbone
+backbone:
+  # [from, number, module, args]
+  [[-1, 1, Focus, [64, 3]],  # 0-P1/2 [3,32,3]
+   [-1, 1, Conv, [128, 3, 2]],  # 1-P2/4 [32,64,3,2]
+   [-1, 3, BottleneckCSP, [128]], # 2 
+   [-1, 1, Conv, [256, 3, 2]],  # 3-P3/8
+   [-1, 9, BottleneckCSP, [256]], # 4
+   [-1, 1, Conv, [512, 3, 2]],  # 5-P4/16
+   [-1, 9, BottleneckCSP, [512]], # 6
+   [-1, 1, Conv, [1024, 3, 2]],  # 7-P5/32
+   [-1, 1, SPP, [1024, [5, 9, 13]]], # 8
+   [-1, 3, BottleneckCSP, [1024, False]],  # 9
+  ]
+# YOLOv5 head
+head:
+  [[-1, 1, Conv, [512, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 6], 1, Concat, [1]],  # cat backbone P4
+   [-1, 3, BottleneckCSP, [512, False]],  # 13
+
+   [-1, 1, Conv, [256, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 4], 1, Concat, [1]],  # cat backbone P3
+   [-1, 3, BottleneckCSP, [256, False]],  #17
+
+   [-1, 1, Conv, [256, 3, 2]],
+   [[-1, 14], 1, Concat, [1]],  # cat head P4
+   [-1, 3, BottleneckCSP, [512, False]],  # 20
+
+   [-1, 1, Conv, [512, 3, 2]],
+   [[-1, 10], 1, Concat, [1]],  # cat head P5
+   [-1, 3, BottleneckCSP, [1024, False]],  # 23
+
+   [[17, 20, 23], 1, Detect, [nc, anchors]],  # Detect(P3, P4, P5)
+  ]
+
+```
+
+*以下为具体分析*
+
+
+
+### parameters（参数）
+
+```yaml
+nc: 9  # number of classes
+depth_multiple: 0.33  # model depth multiple
+width_multiple: 0.50  # layer channel multiple
+```
+
+> **nc**：
+>
+> 为你数据集检测物体的类别个数
+>
+> **depth_multiple**：
+>
+> 控制你模型的深度，是用在backbone中的number≠1的情况下， 即在Bottleneck层（瓶颈层）使用，控制模型的深度，yolov5s中设置为0.33，假设yolov5l中有三个Bottleneck，那yolov5s中就只有一个Bottleneck。（因为一般number=1表示的是功能背景的层，比如说下采样Conv、Focus、SPP（空间金字塔池化））
+>
+> **width_multiple**:
+>
+> 控制卷积核的个数，使用该数值，对之后的卷积核参数进行解析，可以推导得到卷积核的个数（在之后backbone部分会详细说明）
+
+
+
+### anchors  （多尺度滑动窗口）
+
+* 简介：
+
+  传统的检测过程是：
+
+  1、生成图像金字塔，因为待检测的物体的scale是变化的。
+
+  2、用滑动窗口在图片的特征金字塔上面滚动生成很多候选区域。
+
+  3、各种特征提取hog和分类器svm来对上面产生的候选区域中的图片信息来分类。
+
+  4、NMS非极大值抑制得到最后的结果。
+
+  所以，anchor其实就是对预测的对象范围进行约束，用最常出现，最具有代表性的几种先验框为基础，有助于模型快速收敛，并加入了尺寸先验经验，从而实现多尺度学习的目的。
+
+* ```yaml
+  anchors:
+    - [10,13, 16,30, 33,23]  # P3/8
+    - [30,61, 62,45, 59,119]  # P4/16
+    - [116,90, 156,198, 373,326]  # P5/32
+  ```
+
+* 在yolov5中，可根据自己的数据集来更新，添加新的anchors（可使用yolov5自带的模块处理，也可使用网上找到的代码处理）
+
+
+
+### backbone	head 	detect
+
+![image-20210510013809891](https://gitee.com/ruomengawa/pic-go/raw/master/img/20210510013817.png)
+
+> ***其中橙色的数字表示层号，0-9层构成backbone，10-23层构成head，17、20、23 层的输出是Detect()函数的输入***
+
+
+
+### backbone
+
+```yaml
+ # [from, number, module, args]
+  [[-1, 1, Focus, [64, 3]],  # 0-P1/2 [3,32,3]
+   [-1, 1, Conv, [128, 3, 2]],  # 1-P2/4 [32,64,3,2]
+   [-1, 3, BottleneckCSP, [128]], # 2 
+   [-1, 1, Conv, [256, 3, 2]],  # 3-P3/8
+   [-1, 9, BottleneckCSP, [256]], # 4
+   [-1, 1, Conv, [512, 3, 2]],  # 5-P4/16
+   [-1, 9, BottleneckCSP, [512]], # 6
+   [-1, 1, Conv, [1024, 3, 2]],  # 7-P5/32
+   [-1, 1, SPP, [1024, [5, 9, 13]]], # 8
+   [-1, 3, BottleneckCSP, [1024, False]],  # 9
+  ]
+```
+
+* **from列参数**：-1 代表是从上一层获得的输入，-2表示从上两层获得的输入（head同理）。
+
+* **number列参数**：1表示只有一个，3表示有三个相同的模块，其数量即为该层该模块的个数
+
+* **module列参数**：表示该层使用的模块，Focus、SPP、Conv、Bottleneck、BottleneckCSP的代码可以在./models/common.py中获取到
+
+* **args列参数**：即为传入该模块的参数，且输入都省去了（由上层提供），其输入获取是从./models/yolo.py的def parse_model(d, ch)函数中解析得到的。（后文有具体的解析结果）
+
+* **模块具体参数解释**：
+
+  **Conv和Focus参数**：（c_in, c_out, kernel_size, stride）,
+
+  **SPP后的参数**：（c_in, c_out, [kernel_size1,kernel_size2,kernel_size3]）
+
+  **BottleneckCSP后的参数**：(c_in,c_out)*该模块堆叠的次数（在number列）
+
+* **yaml中注释的解释**:（如0-P1/2	1-P2/4）
+
+  0是第一层，从0开始计算；P1指的是含有卷积层的第一层，2是降低了一半
+
+  同理，可得注释解为：
+
+  a - Pb / c
+
+  a：从0开始，表示第几层，层数分布详见上文综述
+
+  P后的b：从1开始，若该层含有卷积层则会出现，表示这是含有卷积层的第b层
+
+  c：表示图片变为原来的1/c倍（像素大小）
+
+* **args列传参的具体解释**：
+
+  > *首先，我们可以从之前的参数解释得到，这里面的数据会主要要考虑的是通道数，但是，其第一个参数并不完全是其通道数，还需进行解析，所以，解释如下*
+
+* 承接上文，有一个名为**width_multiple**的参数，我们在很早之前就对其进行了设置，而该参数，就会对该处的args传参解析造成影响，这就是为什么，对于YOLO V5，无论是V5s，V5m，V5l还是V5x其**Backbone，Neck和Head**一致。其唯一的区别就在与模型的深度和宽度设置，我们只需要修改这两个参数就可以调整模型的网络结构。其中V5l 的参数是默认参数。
+
+  例：
+
+  ```yaml
+  [[-1, 1, Focus, [64, 3]],  # 0-P1/2 [3,32,3]
+     [-1, 1, Conv, [128, 3, 2]],  # 1-P2/4 [32,64,3,2]
+     [-1, 3, BottleneckCSP, [128]], # 2 
+  ```
+
+  在上部分中，第一个args参数为[64, 3]，但经过解析后的结果应该为[3,32,3]，解析缘由为参数**width_multiple**，使用该参数与64相乘，即可得到c_out = 32,而c_in = 3是输入图片默认的3通道，最后的 3 为卷积核的大小3*3
+
+  而第二个args参数[128, 3, 2]，经过解析后，结果为[32,64,3,2]，2位stride（步长）
+
+  第三个args参数[128]，经过解析后，结果为[64,64]*(3)(模型堆叠次数)
+
+* 由上方可以看出：主干网就是图片从大到小，深度不断加深。
+
+
+
+### head
+
+> **head检测头**：一般表示的是经过主干网后输出的特征图，特征图输入head中进行检测，包括类别和位置的检测
+
+```python
+# YOLOv5 head
+head:
+  [[-1, 1, Conv, [512, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 6], 1, Concat, [1]],  # cat backbone P4
+   [-1, 3, BottleneckCSP, [512, False]],  # 13
+
+   [-1, 1, Conv, [256, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 4], 1, Concat, [1]],  # cat backbone P3
+   [-1, 3, BottleneckCSP, [256, False]],  # 17
+
+   [-1, 1, Conv, [256, 3, 2]],
+   [[-1, 14], 1, Concat, [1]],  # cat head P4
+   [-1, 3, BottleneckCSP, [512, False]],  # 20
+
+   [-1, 1, Conv, [512, 3, 2]],
+   [[-1, 10], 1, Concat, [1]],  # cat head P5
+   [-1, 3, BottleneckCSP, [1024, False]],  # 23
+
+   [[17, 20, 23], 1, Detect, [nc, anchors]],  # Detect(P3, P4, P5)
+  ]
+```
+
+解析如上面所述
+
+
+

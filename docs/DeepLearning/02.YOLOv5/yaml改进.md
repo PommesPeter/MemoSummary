@@ -1,0 +1,95 @@
+添加了GhostBottleneck的网络结构
+
+```python
+backbone:
+  # [from, number, module, args]
+  [[-1, 1, Focus, [64, 3]],  # 0-P1/2
+   [-1, 1, Conv, [128, 3, 2]],  # 1-P2/4
+   [-1, 3, GhostBottleneck, [128, 3, 1]],
+   [-1, 1, GhostBottleneck, [256, 3, 2]],
+   [-1, 9, GhostBottleneck, [256, 3, 1]],
+   [-1, 1, SELayer, [256, 16]],   # 3-P3/8
+   [-1, 1, GhostBottleneck, [512, 3, 2]],
+   [-1, 9, GhostBottleneck, [512, 3, 1]],
+   [-1, 1, SELayer, [512, 16]],  # 5-P4/16
+   [-1, 1, Conv, [1024, 3, 2]],  # 7-P5/32
+   [-1, 1, SPP, [1024, [5, 9, 13]]], #9
+   [-1, 1, SELayer, [1024, 16]], # 10
+   [-1, 3, GhostBottleneck, [1024, 3, 1]], #9
+  ]
+
+# YOLOv5 head
+head:
+  [[-1, 1, Conv, [512, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 8], 1, Concat, [1]],  # cat backbone P4
+   [-1, 3, BottleneckCSP, [512, 3, 1]],  # 13
+
+   [-1, 1, Conv, [256, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 5], 1, Concat, [1]],  # cat backbone P3
+   [-1, 3, BottleneckCSP, [256, 3, 1]],  # 17 (P3/8-small)
+
+   [-1, 1, Conv, [256, 3, 2]],
+   [[-1, 17], 1, Concat, [1]],  # cat head P4
+   [-1, 3, BottleneckCSP, [512, 3, 2]],  # 20 (P4/16-medium)
+
+   [-1, 1, Conv, [512, 3, 2]],
+   [[-1, 13], 1, Concat, [1]],  # cat head P5
+   [-1, 3, BottleneckCSP, [1024, 3, 2]],  # 23 (P5/32-large)
+
+   [[20, 23, 26], 1, Detect, [nc, anchors]],  # Detect(P3, P4, P5)
+  ]
+```
+
+| 版本 | Model Summary                                                | 改进策略                        |
+| ---- | :----------------------------------------------------------- | ------------------------------- |
+| 0    | 283 layers, 7276605 parameters, 7276605 gradients, 17.1 GFLOPS | 原版yolov5s                     |
+| 1    | 409 layers, 5080109 parameters, 5080109 gradients, 10.8 GFLOPS | GhostBottleneck替换原来的瓶颈层 |
+
+
+
+my code
+
+```yaml
+backbone:
+  # [from, number, module, args]
+  [[-1, 1, Focus, [64, 3]],  # 0-P1/2
+   [-1, 1, Conv, [128, 3, 2]],  # 1-P2/4
+   [-1, 3, GhostBottleneck, [128, 3, 1]],
+   [-1, 1, GhostBottleneck, [256, 3, 2]],
+   [-1, 9, GhostBottleneck, [256, 3, 1]],
+   [-1, 1, SELayer, [256, 16]],   # 3-P3/8
+   [-1, 1, GhostBottleneck, [512, 3, 2]],
+   [-1, 9, GhostBottleneck, [512, 3, 1]],
+   [-1, 1, SELayer, [512, 16]],  # 5-P4/16
+   [-1, 1, Conv, [1024, 3, 2]],  # 7-P5/32
+   [-1, 1, SPP, [1024, [5, 9, 13]]], #9
+   [-1, 1, SELayer, [1024, 16]], # 10
+   [-1, 3, GhostBottleneck, [1024, 3, 1]], #9
+  ]
+
+# YOLOv5 head
+head:
+  [[-1, 1, Conv, [512, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 8], 1, Concat, [1]],  # cat backbone P4
+   [-1, 3, BottleneckCSP, [512, 3, 1]],  # 13
+
+   [-1, 1, Conv, [256, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 5], 1, Concat, [1]],  # cat backbone P3
+   [-1, 3, BottleneckCSP, [256, 3, 1]],  # 17 (P3/8-small)
+
+   [-1, 1, Conv, [256, 3, 2]],
+   [[-1, 17], 1, Concat, [1]],  # cat head P4
+   [-1, 3, BottleneckCSP, [512, 3, 2]],  # 20 (P4/16-medium)
+
+   [-1, 1, Conv, [512, 3, 2]],
+   [[-1, 13], 1, Concat, [1]],  # cat head P5
+   [-1, 3, BottleneckCSP, [1024, 3, 2]],  # 23 (P5/32-large)
+
+   [[20, 23, 26], 1, Detect, [nc, anchors]],  # Detect(P3, P4, P5)
+  ]
+```
+
