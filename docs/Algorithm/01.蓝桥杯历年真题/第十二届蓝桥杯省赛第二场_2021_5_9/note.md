@@ -716,8 +716,7 @@ int main()
 			printf("%d",rand() % mod);
 		}
 	}
-	
-	return 0;
+    return 0;
 }
 /*
 4 4 3
