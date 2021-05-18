@@ -308,7 +308,30 @@ int main() {
 ### 代码
 
 ```cpp
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<vector>
+#include<map>
+#include<iostream>
+#define ll long long
+using namespace std;
 
+int main()
+{
+	ll n;
+	ll ans = 0;
+	cin>>n;
+	for(ll i = 1;i < n; ++i) {
+		ll k = (i * i) % n;
+		k *= 2;
+		if(k <= n) {
+			ans++;
+		}
+	}
+	cout<<ans<<endl;
+	return 0;
+}
 ```
 
 ## H: 完全平方数
@@ -347,7 +370,73 @@ int main() {
 
 首先很明显，当n为质数的时候，我们直接输出n即可，否则我们将n进行质因子分离，分别将质因子为奇数个的乘起来即可得到最小的x，所以我们用一个map记录该质因子对应的个数，我们先用欧拉筛筛出质数，然后再对n进行分解
 
-### Code
+### 代码
+
+```cpp
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+#include<vector>
+#include<map>
+#include<iostream>
+#define ll long long
+using namespace std;
+
+const int N = 1000000+10;
+
+ll n;
+
+ll primes[N];
+bool vis[N];
+map<int,int> flag;
+
+bool is_prime(ll x) {
+	for(ll i = 2;i * i <= x; ++i) {
+		if(x % i == 0) return false;
+	}
+	return true;
+}
+
+void get_primes() {
+	vis[0] = vis[1] = true;
+	for(ll i = 2;i < N; ++i) {
+		if(!vis[i]) {
+			primes[++primes[0]] = i;
+		}
+		for(ll j = 1;j <= primes[0] && i * primes[j] < N; ++j) {
+			vis[i * primes[j]] = true;
+			if(i % primes[j] == 0) break;
+		}
+	}
+}
+
+int main()
+{
+	scanf("%lld",&n);
+	ll k = n;
+	if(is_prime(n)) {
+		printf("%lld\n",n);
+	}
+	else {
+		get_primes();
+		for(ll i = 1;i <= primes[0]; ++i) {
+			while(k % primes[i] == 0 && k != 1) {
+				k /= primes[i];
+				flag[primes[i]]++;
+			}
+			if(k == 1) break;
+		}
+		if(k - 1) flag[k] = 1;
+		ll ans = 1;
+		for(auto it : flag) {
+			if(it.second % 2) ans *= it.first;
+		}
+		printf("%lld\n",ans);
+	}
+	return 0;
+}
+```
 
 ## I: 负载均衡
 
@@ -423,11 +512,71 @@ ai 严格递增，即 ai < ai+1。
 
 ### 解题思路
 
-这道题我是直接模拟的，应该只有40%的分数，用一个map<in,map<int,int>> fan，fan[i] [j]表示的是第i个时刻的给第j个计算机返回的算力，注意这里的ai
-
-可能不连续
+这道题我是直接模拟的，应该只有40%的分数，用一个map<in,map<int,int>> fan，fan[i] [j]表示的是第i个时刻的给第j个计算机返回的算力，注意这里的ai可能不连续
 
 ### Code
+
+```cpp
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<vector>
+#include<map>
+#include<iostream>
+#include<stack>
+#define ll long long
+#define mod 100000
+using namespace std;
+
+const int N = 200000+10;
+
+int n,m;
+
+int a[N],t[N];
+
+map<int,map<int,int>> fan;
+
+
+int main()
+{
+	scanf("%d%d",&n,&m);
+	for(int i = 1;i <= n; ++i) {
+		scanf("%d",&a[i]);
+	}
+	int a1,b1,c1,d1;
+	for(int i = 1;i <= m; ++i) {
+		scanf("%d%d%d%d",&a1,&b1,&c1,&d1);
+		t[i] = a1;
+		for(int j = t[i-1] + 1; j <= t[i]; ++j) {
+			for(auto it : fan[i]) {
+				a[it.first] += it.second;
+				it.second = 0; 
+			}
+		}
+		
+		if(a[b1] < d1) {
+			puts("-1");
+			continue;
+		}
+		fan[a1 + c1][b1] += d1;
+		a[b1] -= d1;
+		printf("%d\n",a[b1]);
+	}
+	
+	
+	return 0;
+}
+/*
+2 6 
+5 5 
+1 1 5 3
+2 2 2 6
+3 1 2 3
+4 1 6 1
+5 1 3 3
+6 1 3 4
+*/
+```
 
 ## J: 国际象棋
 
@@ -480,4 +629,100 @@ ai 严格递增，即 ai < ai+1。
 
 这道题不会，只会骗点分(
 
-### Code
+### 代码
+
+```cpp
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<vector>
+#include<map>
+#include<iostream>
+#include<stack>
+#define ll long long
+#define mod 1000000007
+using namespace std;
+
+ll n,m,k;
+
+ll ans = 0;
+
+int dx[8] = {-1,-2,-2,-1,1,2,2,1};
+int dy[8] = {-2,-1,1,2,2,1,-1,-2};
+
+int mp[105][105];
+
+
+ll qpow(ll a,ll b) {
+	ll ans = 1;
+	while(b) {
+		if(b & 1) ans = (ans * a) % mod;
+		a = (a * a) % mod;
+		b >>= 1;
+	}
+	return ans;
+}
+ll inv(ll v) {
+	return qpow(v,mod-2);
+}
+
+ll C(ll a,ll b) {
+	ll ans = 1;
+	for(ll i = 1;i <= b; ++i) {
+		ans = (ans * (a-i+1)) % mod;
+		ans /= i;
+//		ans = (ans * inv(i)) % mod;
+	}
+	return ans;
+}
+
+void dfs(int x,int y) {
+	for(int i = 0;i < 8; ++i) {
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+		if(nx > 0 && ny > 0 && nx <= n && ny <= m && mp[nx][ny] == 0) {
+			mp[nx][ny] = 1;
+			ans++;
+			dfs(nx,ny);
+		}
+	}
+}
+
+
+int main()
+{
+	scanf("%lld%lld%lld",&n,&m,&k);
+	if(k == 1) {
+		printf("%lld\n",n*m);
+	}
+	else {
+		if(n == 1) {
+			printf("%lld\n",C(m,k));
+		}
+		else if(k == 2){			
+			ll loc;
+			for(int i = 1;i <= n; ++i) {
+				for(int j = 1;j <= m; ++j) {
+					memset(mp,0,sizeof mp);
+					loc = 0;
+					dfs(i,j);
+					ll tol = n * m - loc - 1;
+					ans = (ans + tol) % mod;
+				}
+			}
+			printf("%lld\n",ans);
+		}
+		else {
+			printf("%d",rand() % mod);
+		}
+	}
+	
+	return 0;
+}
+/*
+4 4 3
+
+276
+*/
+
+```
