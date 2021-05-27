@@ -91,24 +91,6 @@ module.exports = {
             'Evan Xu | <a href="https://github.com/xugaoyi/vuepress-theme-vdoing/blob/master/LICENSE" target="_blank">MIT License</a>', // 博客版权信息，支持a标签
     },
     // htmlModules // 插入hmtl(广告)模块
-    plugins: [
-        [
-            "md-enhance",
-            {
-                // 启用 TeX 支持
-                tex: true,
-            },
-            '@vuepress/last-updated',
-            {
-                transformer: (timestamp, lang) => {
-                    // 不要忘了安装 moment
-                    const moment = require('moment')
-                    moment.locale(lang)
-                    return moment(timestamp).fromNow()
-                }
-            }
-        ]
-    ],
     locales: {
         '/': {
             lang: 'zh-CN'

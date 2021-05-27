@@ -1,3 +1,13 @@
+---
+title: yaml改进
+date: 2021-05-06 22:30:34
+permalink: /pages/d3eda7/
+categories:
+  - DeepLearning
+  - YOLOv5
+tags:
+  - 
+---
 添加了GhostBottleneck的网络结构
 
 ```python

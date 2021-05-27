@@ -21,11 +21,11 @@
   "homepage": "https://github.com/PommesPeter/MemoSummary#readme",
   "devDependencies": {
     "vuepress": "^1.8.2",
-    "vuepress-plugin-mathjax": "^1.2.8",
     "vuepress-theme-vdoing": "^1.8.3"
   },
   "dependencies": {
     "moment": "^2.29.1",
-    "vuepress-plugin-md-enhance": "^1.15.3"
+    "vuepress-plugin-md-enhance": "^1.15.3",
+    "vuepress-plugin-one-click-copy": "^1.0.3"
   }
 }

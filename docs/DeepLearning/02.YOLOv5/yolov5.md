@@ -1,3 +1,13 @@
+---
+title: yolov5
+date: 2021-05-10 09:45:29
+permalink: /pages/c2149b/
+categories:
+  - DeepLearning
+  - YOLOv5
+tags:
+  - 
+---
 [TOC]
 
 # Yolov5的结构解析
