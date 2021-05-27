@@ -93,21 +93,19 @@ module.exports = {
     // htmlModules // 插入hmtl(广告)模块
     plugins: [
         [
-            "md-enhance",
+            'vuepress-plugin-comment',
             {
-                // 启用 TeX 支持
-                tex: true,
-            },
-            '@vuepress/last-updated',
-            {
-                transformer: (timestamp, lang) => {
-                    // 不要忘了安装 moment
-                    const moment = require('moment')
-                    moment.locale(lang)
-                    return moment(timestamp).fromNow()
+                choosen: 'gitalk',
+                options: {
+                    clientID: 'GitHub Application Client ID',
+                    clientSecret: 'GitHub Application Client Secret',
+                    repo: 'GitHub repo',
+                    owner: 'GitHub repo owner',
+                    admin: ['GitHub repo owner and collaborators, only these guys can initialize github issues'],
+                    distractionFreeMode: false
                 }
             }
-        ], 'vuepress-plugin-latex'
+        ], ['vuepress-plugin-latex']
     ],
     locales: {
         '/': {
