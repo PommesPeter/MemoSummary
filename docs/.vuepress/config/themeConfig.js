@@ -92,7 +92,22 @@ module.exports = {
     },
     // htmlModules // 插入hmtl(广告)模块
     plugins: [
-        ['vuepress-plugin-latex']
+        [
+            "md-enhance",
+            {
+                // 启用 TeX 支持
+                tex: true,
+            },
+            '@vuepress/last-updated',
+            {
+                transformer: (timestamp, lang) => {
+                    // 不要忘了安装 moment
+                    const moment = require('moment')
+                    moment.locale(lang)
+                    return moment(timestamp).fromNow()
+                }
+            }
+        ]
     ],
     locales: {
         '/': {
