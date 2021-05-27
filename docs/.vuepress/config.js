@@ -30,7 +30,6 @@ module.exports = {
             "md-enhance",
             {
                 tex: true,
-                enableAll: true
             }
         ],
         [
