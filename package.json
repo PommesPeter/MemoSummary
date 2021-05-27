@@ -24,6 +24,7 @@
     "vuepress-theme-vdoing": "^1.8.3"
   },
   "dependencies": {
+    "katex": "^0.13.11",
     "moment": "^2.29.1",
     "vuepress-plugin-md-enhance": "^1.15.3",
     "vuepress-plugin-one-click-copy": "^1.0.3"
