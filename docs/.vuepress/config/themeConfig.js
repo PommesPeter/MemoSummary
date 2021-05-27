@@ -92,20 +92,7 @@ module.exports = {
     },
     // htmlModules // 插入hmtl(广告)模块
     plugins: [
-        [
-            'vuepress-plugin-comment',
-            {
-                choosen: 'gitalk',
-                options: {
-                    clientID: 'GitHub Application Client ID',
-                    clientSecret: 'GitHub Application Client Secret',
-                    repo: 'GitHub repo',
-                    owner: 'GitHub repo owner',
-                    admin: ['GitHub repo owner and collaborators, only these guys can initialize github issues'],
-                    distractionFreeMode: false
-                }
-            }
-        ], ['vuepress-plugin-latex']
+        ['vuepress-plugin-latex']
     ],
     locales: {
         '/': {
