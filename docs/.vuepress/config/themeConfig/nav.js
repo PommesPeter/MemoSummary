@@ -37,6 +37,7 @@ module.exports = [
     items: [
       { text: '面向对象程序设计', link: '/courses/oop/class/' },
       { text: '数学建模', link: '/courses/mathmodeling/linear/' },
+      { text: '数据库系统概论', link: '/courses/database/concept' },
       { text: '算法设计与分析', link: '/courses/b5e154/' },
       { text: '数字图像处理', link: '/courses/69521d/' },
       { text: '软件工程与UML', link: '/courses/527279/' },
