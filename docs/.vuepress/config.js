@@ -1,7 +1,7 @@
 const themeConfig = require('./config/themeConfig.js')
 
 module.exports = {
-    icons: "/imgs/favicon.ico",
+    icons: "/imgs/icon.svg",
     title: "PommesPeter's Blog",
     description: "PommesPeter Knowledge Base",
     head: [
