@@ -30,6 +30,12 @@ module.exports = {
             "md-enhance",
             {
                 tex: true,
+                flowchart: true,
+                mermaid: true,
+                presentation: true,
+                tasklist: true,
+                footnote: true,
+                mark: true
             }
         ],
         [
