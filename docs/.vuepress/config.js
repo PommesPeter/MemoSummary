@@ -70,7 +70,7 @@ module.exports = {
                         show: false // 是否在移动设备上显示(default: false)
                     },
                     react: {
-                        opacity: 0.8 // 模型透明度(default: 0.8)
+                        opacity: 0.95 // 模型透明度(default: 0.8)
                     }
                 }
             }
