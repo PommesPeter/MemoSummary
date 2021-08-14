@@ -4,8 +4,8 @@ module.exports = [
     text: '✨深度学习',
     link: '/deeplearning/',
     items: [
-      { text: '深度学习基础', link: '/deeplearning/basis' },
-      { text: '深度学习框架', link: '/deeplearning/basisframework' },
+      { text: '科研方法', link: '/deeplearning/rearch/howtoreadpaper' },
+      { text: '深度学习导论', link: '/deeplearning/basisframework' },
       { text: '图像分类', link: '/deeplearning/imageclassification' },
       { text: '目标检测', link: '/deeplearning/objectdetection' },
       { text: '图像分割', link: '/deeplearning/semanticsegmentation' },
