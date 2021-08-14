@@ -28,6 +28,7 @@ module.exports = [
     items: [
       { text: '前端开发', link: '/development/basis' },
       { text: '后端开发', link: '/development/basisframework' },
+      { text: 'Git版本控制', link: '/development/git' },
       { text: '杂项笔记', link: '/development/objectdetection' },
     ]
   },
